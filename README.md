@@ -62,7 +62,31 @@ Visit `http://localhost:8000` in your browser.
 
 ## Deployment to Azure Web App Service
 
-### Method 1: Using Azure CLI
+### Method 1: Using Terraform (Recommended) 🌟
+
+The easiest way to deploy is using Terraform for infrastructure as code.
+
+**Quick Start:**
+
+```bash
+# 1. Configure your settings
+cd terraform
+cp terraform.tfvars.example terraform.tfvars
+nano terraform.tfvars  # Edit with your app name and OpenAI API key
+
+# 2. Deploy infrastructure
+cd ..
+chmod +x deploy.sh
+./deploy.sh
+
+# 3. Deploy application code
+zip -r app.zip . -x "*.git*" "*terraform*" "*.venv*" "*__pycache__*"
+az webapp deploy --resource-group rg-simplerag-app --name <your-app-name> --src-path app.zip --type zip
+```
+
+📖 **Detailed Guide:** See [terraform/README.md](terraform/README.md) for complete instructions, troubleshooting, and advanced options.
+
+### Method 2: Using Azure CLI (Manual)
 
 1. **Login to Azure**
 
@@ -106,7 +130,7 @@ az webapp config appsettings set --resource-group myResourceGroup --name myRAGAp
 az webapp up --resource-group myResourceGroup --name myRAGApp --runtime "PYTHON:3.11"
 ```
 
-### Method 2: Using VS Code Azure Extension
+### Method 3: Using VS Code Azure Extension
 
 1. Install the Azure App Service extension in VS Code
 2. Sign in to your Azure account
@@ -118,7 +142,20 @@ az webapp up --resource-group myResourceGroup --name myRAGApp --runtime "PYTHON:
    - Navigate to Configuration → Application Settings
    - Add `OPENAI_API_KEY` with your API key value
 
-### Method 3: Using Azure Portal
+### Method 4: Using Azure Portal
+
+1. Log in to [Azure Portal](https://portal.azure.com)
+2. Create a new Web App:
+   - Runtime: Python 3.11
+   - Operating System: Linux
+3. In the Configuration section, add:
+   - Application Setting: `OPENAI_API_KEY` = your API key
+   - Startup Command: `gunicorn --bind=0.0.0.0 --timeout 600 app:app`
+4. Deploy using GitHub Actions, Local Git, FTP/FTPS, or ZIP deploy
+
+### Method 5: Using Azure DevOps Pipeline
+
+Use the included [azure-pipelines.yml](azure-pipelines.yml) for automated CI/CD deployment.
 
 1. Log in to [Azure Portal](https://portal.azure.com)
 2. Create a new Web App:

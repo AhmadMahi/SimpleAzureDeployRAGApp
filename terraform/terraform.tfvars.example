@@ -1,0 +1,22 @@
+# Azure Configuration
+resource_group_name    = "rg-simplerag-app"
+location              = "East US"
+app_name              = "my-unique-rag-app-name"  # Must be globally unique
+app_service_plan_name = "asp-simplerag"
+
+# SKU Options:
+# F1  = Free (limited, no always-on)
+# B1  = Basic ($13/month)
+# S1  = Standard ($69/month)
+# P1V2 = Premium ($146/month)
+sku_name = "B1"
+
+# OpenAI Configuration
+openai_api_key = "your-openai-api-key-here"
+
+# Environment
+environment = "production"
+
+# Optional Features
+enable_app_insights  = false
+enable_staging_slot  = false
